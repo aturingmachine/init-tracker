@@ -12,7 +12,9 @@ import {
   transitions,
   VTextField,
   VCard,
-  VAlert
+  VAlert,
+  VCheckbox,
+  VBadge
 } from 'vuetify'
 import 'vuetify/src/stylus/app.styl'
 
@@ -29,7 +31,9 @@ Vue.use(Vuetify, {
     transitions,
     VTextField,
     VCard,
-    VAlert
+    VAlert,
+    VCheckbox,
+    VBadge
   },
   iconfont: 'md',
 })
