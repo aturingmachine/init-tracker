@@ -251,6 +251,6 @@ export default {
 
 <style>
 .v-label--active {
-  font-size: 10px;
+  font-size: 12px;
 }
 </style>
