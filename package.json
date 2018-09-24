@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --port=6969",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "npm run build; push-dir --dir=dist --branch=gh-pages --cleanup"
+    "deploy": "npm run build; cp -r dist docs"
   },
   "dependencies": {
     "vue": "^2.5.17",
