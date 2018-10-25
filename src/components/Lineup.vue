@@ -1,22 +1,24 @@
 <template>
-  <v-card v-if="fullList.length > 0">
+  <v-card v-if="fullList.length > 0" class="mt-2">
       <v-layout wrap>
+        <v-flex xs6 class="pa-1 yellow darken-2 white--text title">
+          On Deck:
+        </v-flex>
         <v-flex xs6 class="green white--text pa-1 title">
           Up:
         </v-flex>
-        <v-flex xs6 class="pa-1 orange darken-2 white--text title">
-          On Deck:
-        </v-flex>
 
+        
+        <v-flex xs6 class="pa-1 yellow darken-2 white--text title" v-if="fullList.length > 1">
+          {{ getNext() }}
+        </v-flex>
+        <v-flex xs6 class="pa-1 yellow darken-2 white--text title" v-else>
+          Add another combatant
+        </v-flex>
         <v-flex xs6 class="green white--text pa-1 title">
           {{ fullList[turn].name }}
         </v-flex>
-        <v-flex xs6 class="pa-1 orange darken-2 white--text title" v-if="fullList.length > 1">
-          {{ getNext() }}
-        </v-flex>
-        <v-flex xs6 class="pa-1 orange darken-2 white--text title" v-else>
-          Add another combatant
-        </v-flex>
+        
         
       </v-layout>
     </v-card>

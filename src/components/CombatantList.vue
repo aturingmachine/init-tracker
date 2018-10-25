@@ -19,13 +19,19 @@
 
         <v-card-text class="pb-0 pt-0">
           <v-layout align-center row class="pt-0 mt-0 pb-0 mb-0">
-            <v-flex xs2>
+            <v-flex xs2 class="mr-3">
               <v-text-field min="0" v-model="combatant.int"
                type="number" label="Initiative" @click="sortList()">
             </v-text-field>
             </v-flex>
 
-            <v-flex xs9 class="red">
+            <v-flex xs2>
+              <v-text-field min="0" v-model="combatant.ac"
+               type="number" label="AC" @click="sortList()">
+            </v-text-field>
+            </v-flex>
+
+            <v-flex xs8>
             </v-flex>
 
             <!-- Actions for a combatant -->

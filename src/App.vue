@@ -1,13 +1,20 @@
 <template>
   <v-app>
     <!-- Toolbar -->
-    <v-toolbar height="35px" dense class="grey mb-0">
+    
+    <div>
       <v-container class="ma-0 pa-0 mb-0">
-        <v-layout column align-center>
-          <v-flex xs3>
+        <v-layout row align-center>
+          <v-flex xs4 class="orange white--text toolbar-icon" @click="decrementTurn()">
+            <v-icon dark> fast_rewind </v-icon>
           </v-flex>
-          <v-flex xs3>
-      <v-btn small icon class="blue white--text" @click="showForm = !showForm">
+          <v-flex style="height: 27px;" xs4 class="blue white--text toolbar-icon" @click="showForm = !showForm">
+            <v-icon dark> add </v-icon>
+          </v-flex>
+          <v-flex xs4 class="green white--text toolbar-icon" @click="incrementTurn()">
+            <v-icon dark>fast_forward</v-icon>
+          </v-flex>
+      <!-- <v-btn small icon class="blue white--text" @click="showForm = !showForm">
         <v-icon> add </v-icon>
       </v-btn>
       <v-btn small icon class="orange white--text" @click="decrementTurn()">
@@ -15,13 +22,11 @@
       </v-btn>
       <v-btn small icon class="green white--text" @click="incrementTurn()">
         <v-icon>fast_forward</v-icon>
-      </v-btn>
-          </v-flex>
-          <v-flex xs3>
-          </v-flex>
+      </v-btn> -->
         </v-layout>
       </v-container>
-    </v-toolbar>
+      </div>
+  
 
     <!-- Up Now and On Deck -->
     <lineup :full-list="fullList" :turn="turn">
@@ -163,5 +168,12 @@ export default {
 <style>
 .v-label--active {
   font-size: 12px;
+}
+
+.toolbar-icon {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>

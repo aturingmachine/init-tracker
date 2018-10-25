@@ -2,13 +2,17 @@
   <v-card class="mb-2 mt-1 ml-2 mr-2 elevation-5" v-if="showForm">
       <v-card-text class="body">
         <v-layout row wrap>
-          <v-flex xs6>
+          <v-flex xs5 class="mr-3">
         <v-text-field autofocus v-model="newCombatant.name" label="Name"></v-text-field>
           </v-flex>
-          <v-flex xs2></v-flex>
-          <v-flex xs4>
+          <v-flex xs3 class="mr-3">
         <v-text-field v-model="newCombatant.int" type="number"
-          min="0" label="Initiative" @keyup.enter="addCombatant()">
+          min="0" label="Initiative">
+         </v-text-field>
+          </v-flex>
+          <v-flex xs3>
+        <v-text-field v-model="newCombatant.ac" type="number"
+          min="0" label="AC" @keyup.enter="addCombatant()">
          </v-text-field>
           </v-flex>
           <v-flex x12>
