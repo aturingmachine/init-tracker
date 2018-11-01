@@ -3,7 +3,7 @@
     <!-- Toolbar -->
     
     <div>
-      <v-container class="ma-0 pa-0 mb-0">
+      <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
         <v-layout row align-center>
           <v-flex xs4 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark> fast_rewind </v-icon>
