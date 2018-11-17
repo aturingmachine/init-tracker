@@ -5,9 +5,6 @@
 
         <v-toolbar dense card height="25px"
          :class="calculateToolbarClass(combatant) ? 'green white--text' :'grey lighten-2'">
-          <!-- <span v-if="combatant.isPlayer" >
-            <strong>PC</strong> &nbsp;
-          </span> -->
           <v-badge left v-if="combatant.isPlayer">
             <span slot="badge"><strong>PC</strong></span>
           {{ combatant.name }}
@@ -15,6 +12,15 @@
           <span v-else>
             {{ combatant.name }}
           </span>
+          <v-spacer></v-spacer>
+          <v-btn :class="calculateToolbarClass(combatant) ? 'white--text' : 'black--text'"
+           icon small v-if="isEdgeOfList(combatant) != -1" @click="moveCombatantUp(combatant)">
+            <v-icon>vertical_align_top</v-icon>
+          </v-btn>
+          <v-btn :class="calculateToolbarClass(combatant) ? 'white--text' : 'black--text'"
+           small icon v-if="isEdgeOfList(combatant) != 1" @click="moveCombatantDown(combatant)">
+            <v-icon>vertical_align_bottom</v-icon>
+          </v-btn>
         </v-toolbar>
 
         <v-card-text class="pb-0 pt-0">
@@ -35,7 +41,7 @@
             </v-flex>
 
             <!-- Actions for a combatant -->
-            <v-flex xs1 class="">
+            <v-flex xs1>
               <v-btn icon small class="red white--text" @click="removeCombatant(combatant)">
                 <v-icon>delete</v-icon>
               </v-btn>
@@ -78,6 +84,24 @@ export default {
 
     removeCombatant(combatant) {
       this.$emit('removeCombatant', combatant)
+    },
+
+    isEdgeOfList(combatant) {
+      if (this.fullList.indexOf(combatant) == 0) {
+        return -1
+      } else if (this.fullList.indexOf(combatant) == this.fullList.length -1) {
+        return 1
+      } else {
+        return 0
+      }
+    },
+    
+    moveCombatantDown(combatant) {
+      this.$emit('moveCombatantDown', combatant)
+    },
+
+    moveCombatantUp(combatant) {
+      this.$emit('moveCombatantUp', combatant)
     }
   }
 }

@@ -14,15 +14,6 @@
           <v-flex xs4 class="green white--text toolbar-icon" @click="incrementTurn()">
             <v-icon dark>fast_forward</v-icon>
           </v-flex>
-      <!-- <v-btn small icon class="blue white--text" @click="showForm = !showForm">
-        <v-icon> add </v-icon>
-      </v-btn>
-      <v-btn small icon class="orange white--text" @click="decrementTurn()">
-        <v-icon>fast_rewind</v-icon>
-      </v-btn>
-      <v-btn small icon class="green white--text" @click="incrementTurn()">
-        <v-icon>fast_forward</v-icon>
-      </v-btn> -->
         </v-layout>
       </v-container>
       </div>
@@ -37,7 +28,8 @@
     
 
     <!-- Combatant List -->
-    <combatant-list :full-list="fullList" :turn="turn" @sort="sortList()" @removeCombatant="removeCombatant">
+    <combatant-list :full-list="fullList" :turn="turn" @sort="sortList()" @removeCombatant="removeCombatant"
+    @moveCombatantDown="moveCombatantDown" @moveCombatantUp="moveCombatantUp" >
     </combatant-list>
 
    <v-card class="blue lighten-1 pa-3 white--text ma-2" v-if="fullList.length < 1" >
@@ -150,6 +142,28 @@ export default {
         }
       })
       window.localStorage.setItem('InitTrackerSave', JSON.stringify(playersToSave))
+    },
+
+    moveCombatantDown(combatant) {
+      let currentIndex = this.fullList.indexOf(combatant)
+      let current = this.fullList[currentIndex]
+      this.fullList[currentIndex] = this.fullList[currentIndex + 1]
+      this.fullList[currentIndex + 1] = current
+      this.fullList.unshift()
+    },
+
+    moveCombatantUp(combatant) {
+      let currentIndex = this.fullList.indexOf(combatant)
+      let current = this.fullList[currentIndex]
+      this.fullList[currentIndex] = this.fullList[currentIndex - 1]
+      this.fullList[currentIndex - 1] = current
+      this.fullList.unshift()
+    },
+
+    move() {
+      var b = list[y];
+      list[y] = list[x];
+      list[x] = b;
     }
   },
 
