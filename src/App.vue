@@ -5,13 +5,13 @@
     <div>
       <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
         <v-layout row align-center>
-          <v-flex xs3 class="orange white--text toolbar-icon" @click="decrementTurn()">
+          <v-flex xs4 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark> fast_rewind </v-icon>
           </v-flex>
-          <v-flex style="height: 27px;" xs3 class="blue white--text toolbar-icon" @click="showForm = !showForm">
+          <v-flex xs4 style="height: 27px;" class="blue white--text toolbar-icon" @click="showForm = !showForm">
             <v-icon dark> add </v-icon>
           </v-flex>
-          <v-flex xs3 class="green white--text toolbar-icon" @click="incrementTurn()">
+          <v-flex xs4 class="green white--text toolbar-icon" @click="incrementTurn()">
             <v-icon dark>fast_forward</v-icon>
           </v-flex>
         </v-layout>
