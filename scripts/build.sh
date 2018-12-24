@@ -5,13 +5,6 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-OLDVER=$(cat version)
-
-if (( $(echo "$OLDVER >= $1" | bc -l) )); then
-  echo "Please provide a version number higher than $OLDVER"
-  exit 2
-fi
-
 echo "Deleting old build..."
 rm -rf docs/*
 
