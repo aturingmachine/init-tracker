@@ -122,6 +122,10 @@ export default {
     },
 
     removeCombatant(combatant) {
+      // check if turn will be out of bounds, if so set turn to new last combatant
+      if (this.fullList.indexOf(combatant) == this.fullList.length - 1) {
+        this.turn = this.fullList.length -2
+      }
       this.fullList.splice(this.fullList.indexOf(combatant), 1)
       this.sortList()
     },
