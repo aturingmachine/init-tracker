@@ -21,11 +21,7 @@ npm run build
 echo "Copying new build to /docs for deploy..."
 cp -r dist/* docs
 
+echo "$1" > version
+
 echo "Deploying to GitHub"
 git add -A && git commit -m "Deploying Version $1" && git push
-
-if [ "$?" -lt "1" ]; then
-  echo "Deploy Successful!"
-  echo "$1" > version
-  exit 0
-fi
