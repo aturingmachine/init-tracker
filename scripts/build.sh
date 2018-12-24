@@ -24,4 +24,4 @@ cp -r dist/* docs
 echo "$1" > version
 
 echo "Deploying to GitHub"
-git add -A && git commit -m "Deploying Version $1" && git push
+git add -A && git commit -m ":tada: Deploying Version $1" && git push

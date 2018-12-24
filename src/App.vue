@@ -5,13 +5,13 @@
     <div>
       <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
         <v-layout row align-center>
-          <v-flex xs4 class="orange white--text toolbar-icon" @click="decrementTurn()">
+          <v-flex xs3 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark> fast_rewind </v-icon>
           </v-flex>
-          <v-flex style="height: 27px;" xs4 class="blue white--text toolbar-icon" @click="showForm = !showForm">
+          <v-flex style="height: 27px;" xs3 class="blue white--text toolbar-icon" @click="showForm = !showForm">
             <v-icon dark> add </v-icon>
           </v-flex>
-          <v-flex xs4 class="green white--text toolbar-icon" @click="incrementTurn()">
+          <v-flex xs3 class="green white--text toolbar-icon" @click="incrementTurn()">
             <v-icon dark>fast_forward</v-icon>
           </v-flex>
         </v-layout>
@@ -49,19 +49,15 @@ import CombatantList from './components/CombatantList.vue'
 export default {
   data: () => {
     return {
-      name: 'app',
+      name: 'Initiative Tracker',
       fullList: [],
       showForm: false,
       turn: 0,
-      needsSort: true,
+      needsSort: true
     }
   },
 
   watch: {
-    turn() {
-      
-    },
-
     fullList() {
       this.savePlayers()
     }
@@ -83,7 +79,7 @@ export default {
     },
 
     incrementTurn() {
-      if (this.turn == this.fullList.length - 1) {
+      if (this.turn == this.fullList.length - 1 || this.fullList.length == 0) {
         this.turn = 0
       } else {
         this.turn++
@@ -122,7 +118,6 @@ export default {
     },
 
     removeCombatant(combatant) {
-      // check if turn will be out of bounds, if so set turn to new last combatant
       if (this.fullList.indexOf(combatant) == this.fullList.length - 1) {
         this.turn = this.fullList.length -2
       }
@@ -139,12 +134,7 @@ export default {
     },
 
     savePlayers() {
-      let playersToSave = []
-      this.fullList.forEach(combatant => {
-        if (combatant.isPlayer) {
-          playersToSave.push(combatant)
-        }
-      })
+      let playersToSave = this.fullList.filter(combatant => combatant.isPlayer)
       window.localStorage.setItem('InitTrackerSave', JSON.stringify(playersToSave))
     },
 
@@ -193,5 +183,6 @@ export default {
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
+  user-select: none;
 }
 </style>
