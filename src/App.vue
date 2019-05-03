@@ -4,25 +4,36 @@
 
     <div class="header">
       <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
-        <v-layout row align-center>
-          <v-flex xs3 class="orange white--text toolbar-icon" @click="decrementTurn()">
+        <v-layout row wrap align-center>
+          <v-flex xs12 class="indigo darken-3 white--text toolbar-icon round-header">
+            Round: {{ round }}
+          </v-flex>
+          <v-flex xs6 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark>fast_rewind</v-icon>
           </v-flex>
-          <v-flex xs3 class="blue white--text toolbar-icon" @click="showForm = !showForm">
-            <v-icon dark>add</v-icon>
-          </v-flex>
-          <v-flex xs3 class="green white--text toolbar-icon" @click="incrementTurn()">
+          <v-flex xs6 class="green white--text toolbar-icon" @click="incrementTurn()">
             <v-icon dark>fast_forward</v-icon>
           </v-flex>
-          <v-flex xs3 class="purple white--text toolbar-icon" @click="sortList()">
+          <v-flex xs4 class="purple white--text toolbar-icon" @click="sortList()">
             <v-icon dark>sort</v-icon>
           </v-flex>
+          <v-flex xs4 class="blue white--text toolbar-icon" @click="showForm = !showForm">
+            <v-icon dark>add</v-icon>
+          </v-flex>
+          <v-flex v-if="!confirmingReset" xs4 class="deep-orange lighten-1 white--text toolbar-icon" @click="confirmingReset = true">
+            <v-icon dark>refresh</v-icon>
+          </v-flex>
+            <v-flex v-if="confirmingReset" xs2 class="deep-orange lighten-1 white--text toolbar-icon" @click="confirmingReset = false">
+              <v-icon dark>cancel</v-icon>
+            </v-flex>
+            <v-flex v-if="confirmingReset" xs2 class="green darken-4 white--text toolbar-icon" @click="reset()">
+              <v-icon dark>check_circle</v-icon>
+            </v-flex>
         </v-layout>
       </v-container>
 
       <!-- Up Now and On Deck -->
       <lineup :full-list="fullList" :turn="turn"></lineup>
-      <!-- </div> -->
 
       <!-- New combatant form -->
 
@@ -51,6 +62,10 @@
         </v-layout>
       </v-card>
     </div>
+
+    <v-snackbar v-model="snackbar" :timeout="2000" color="success">
+      {{ snackBarText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -66,7 +81,11 @@ export default {
       fullList: [],
       showForm: false,
       turn: 0,
-      needsSort: true
+      needsSort: true,
+      round: 0,
+      confirmingReset: false,
+      snackbar: false,
+      snackBarText: ''
     };
   },
 
@@ -94,6 +113,7 @@ export default {
     incrementTurn() {
       if (this.turn == this.fullList.length - 1 || this.fullList.length == 0) {
         this.turn = 0;
+        this.round++;
       } else {
         this.turn++;
       }
@@ -102,6 +122,9 @@ export default {
     decrementTurn() {
       if (this.turn == 0) {
         this.turn = this.fullList.length - 1;
+        if (this.round !== 0) {
+          this.round--;
+        }
       } else {
         this.turn--;
       }
@@ -114,16 +137,10 @@ export default {
       this.needsSort = false;
     },
 
-    setupSort() {
-      if (this.needsSort) {
-        this.sortList();
-        this.needsSort = false;
-      }
-    },
-
     addCombatant(newbie) {
       this.fullList.push(newbie);
       this.sortList();
+      this.procSnackbar(`Added ${newbie.name}`)
     },
 
     clearCombatantForm() {
@@ -136,6 +153,7 @@ export default {
       }
       this.fullList.splice(this.fullList.indexOf(combatant), 1);
       this.sortList();
+      this.procSnackbar(`Removed ${combatant.name}`)
     },
 
     getNext() {
@@ -154,6 +172,11 @@ export default {
       );
     },
 
+    autoSave() {
+      this.savePlayers()
+      this.procSnackbar('Automaticaly Saved Data (~‾▿‾)~')
+    },
+
     moveCombatantDown(combatant) {
       let currentIndex = this.fullList.indexOf(combatant);
       let current = this.fullList[currentIndex];
@@ -170,13 +193,17 @@ export default {
       this.fullList.unshift();
     },
 
-    move() {
-      var b = list[y];
-      list[y] = list[x];
-      list[x] = b;
+    reset() {
+      this.procSnackbar('Combat Rounds Reset')
+      this.turn = 0;
+      this.round = 0;
+      this.confirmingReset = false;
     },
 
-    setupSaveTimer() {}
+    procSnackbar(message) {
+      this.snackBarText = message;
+      this.snackbar = true
+    }
   },
 
   created() {
@@ -189,7 +216,7 @@ export default {
 
   mounted() {
     this.sortList();
-    setInterval(this.savePlayers, 120000);
+    setInterval(this.autoSave, 120000);
   }
 };
 </script>
@@ -219,10 +246,19 @@ export default {
 }
 
 .content {
-  padding-top: 90px !important;
+  padding-top: 130px !important;
 }
 
 .more-content {
-  padding-top: 440px !important;
+  padding-top: 485px !important;
+}
+
+.round-header {
+  cursor: default;
+  user-select: none; 
+}
+
+.round-header:hover {
+  filter: none;
 }
 </style>

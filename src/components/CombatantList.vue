@@ -34,7 +34,12 @@
           >
             <v-icon>vertical_align_bottom</v-icon>
           </v-btn>
-          <v-btn icon small class="red--text" @click="removeCombatant(combatant)">
+          <v-btn
+            icon
+            small
+            :class="calculateToolbarClass(combatant) ? 'red--text text--lighten-5' : 'red--text'"
+            @click="removeCombatant(combatant)"
+          >
             <v-icon>delete</v-icon>
           </v-btn>
         </v-toolbar>
