@@ -92,6 +92,11 @@ export default {
   watch: {
     fullList(oldList, newList) {
       this.savePlayers();
+    },
+
+    turn() {
+      const target = document.getElementById(`combatant-${this.fullList[this.turn].name}`).offsetTop - 145
+      window.scroll({ top: target, behavior: 'smooth' })
     }
   },
 

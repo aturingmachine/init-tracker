@@ -1,7 +1,7 @@
 <template>
   <v-layout v-if="fullList.length > 0" row class="pt-2 mt-2 mr-2 ml-2">
     <v-flex xs12 class>
-      <v-card v-for="combatant in fullList" :key="combatant.name + combatant.int" class="mb-3 mt-2">
+      <v-card :id="`combatant-${combatant.name}`" v-for="combatant in fullList" :key="combatant.name + combatant.int" class="mb-3 mt-2">
         <v-toolbar
           dense
           card
