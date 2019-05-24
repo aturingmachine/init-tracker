@@ -1,21 +1,12 @@
-# init-tracker
+# Init-Tracker
 
-## Project setup
-```
-npm install
-```
+This is a simple Single Page Application used to track initiative in Dungeons and Dragons games. Combatants can be added to the list allowing you to track their:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+- Name
+- Initiative
+- Armor Class
+- Spell Save DC
+- Passive Perceptions
+- Conditions
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
+Combatants marked as a Player Character will be saved to your browsers localStorage and reloaded back into the appliction on startup so they do not need to be re-entered. Player characters are saved on addition and automatically every 2 minutes.
