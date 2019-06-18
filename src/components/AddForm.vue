@@ -9,13 +9,7 @@
           <v-text-field v-model="newCombatant.int" type="number" min="0" label="Initiative"></v-text-field>
         </v-flex>
         <v-flex xs3>
-          <v-text-field
-            v-model="newCombatant.ac"
-            type="number"
-            min="0"
-            label="AC"
-            @keyup.enter="addCombatant()"
-          ></v-text-field>
+          <v-text-field v-model="newCombatant.ac" type="number" min="0" label="AC"></v-text-field>
         </v-flex>
         <v-flex xs9></v-flex>
         <v-flex xs5 class="mr-3">
@@ -24,7 +18,6 @@
             type="number"
             min="0"
             label="Spell Save DC"
-            @keyup.enter="addCombatant()"
           ></v-text-field>
         </v-flex>
         <v-flex xs5>
@@ -33,7 +26,6 @@
             type="number"
             min="0"
             label="Passive Perception"
-            @keyup.enter="addCombatant()"
           ></v-text-field>
         </v-flex>
         <v-flex x12>
@@ -46,13 +38,9 @@
       </v-layout>
     </v-card-text>
     <v-card-actions class="mt-0 pt-0">
-      <v-btn small icon class="green white--text" @click="addCombatant()">
-        <v-icon>add</v-icon>
-      </v-btn>
+      <v-btn class="green white--text" :disabled="shouldDisable()" @click="addCombatant()">Add</v-btn>
       <v-spacer></v-spacer>
-      <v-btn small icon class="red white--text" @click="clearCombatantForm()">
-        <v-icon>clear</v-icon>
-      </v-btn>
+      <v-btn class="red white--text" @click="clearCombatantForm()">Cancel</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -68,10 +56,22 @@ export default {
   props: {
     showForm: {
       type: Boolean
+    },
+
+    currentNames: {
+      type: Array
     }
   },
 
   methods: {
+    shouldDisable() {
+      return !(
+        !!this.newCombatant.name &&
+        this.newCombatant.name.length > 0 &&
+        this.currentNames.indexOf(this.newCombatant.name) === -1
+      );
+    },
+
     addCombatant() {
       this.$emit("addCombatant", this.newCombatant);
       this.clearCombatantForm();

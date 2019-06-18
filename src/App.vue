@@ -5,9 +5,10 @@
     <div class="header">
       <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
         <v-layout row wrap align-center>
-          <v-flex xs12 class="indigo darken-3 white--text toolbar-icon round-header">
-            Round: {{ round }}
-          </v-flex>
+          <v-flex
+            xs12
+            class="indigo darken-3 white--text toolbar-icon round-header"
+          >Round: {{ round }}</v-flex>
           <v-flex xs6 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark>fast_rewind</v-icon>
           </v-flex>
@@ -20,15 +21,30 @@
           <v-flex xs4 class="blue white--text toolbar-icon" @click="showForm = !showForm">
             <v-icon dark>add</v-icon>
           </v-flex>
-          <v-flex v-if="!confirmingReset" xs4 class="deep-orange lighten-1 white--text toolbar-icon" @click="confirmingReset = true">
+          <v-flex
+            v-if="!confirmingReset"
+            xs4
+            class="deep-orange lighten-1 white--text toolbar-icon"
+            @click="confirmingReset = true"
+          >
             <v-icon dark>refresh</v-icon>
           </v-flex>
-            <v-flex v-if="confirmingReset" xs2 class="deep-orange lighten-1 white--text toolbar-icon" @click="confirmingReset = false">
-              <v-icon dark>cancel</v-icon>
-            </v-flex>
-            <v-flex v-if="confirmingReset" xs2 class="green darken-4 white--text toolbar-icon" @click="reset()">
-              <v-icon dark>check_circle</v-icon>
-            </v-flex>
+          <v-flex
+            v-if="confirmingReset"
+            xs2
+            class="deep-orange lighten-1 white--text toolbar-icon"
+            @click="confirmingReset = false"
+          >
+            <v-icon dark>cancel</v-icon>
+          </v-flex>
+          <v-flex
+            v-if="confirmingReset"
+            xs2
+            class="green darken-4 white--text toolbar-icon"
+            @click="reset()"
+          >
+            <v-icon dark>check_circle</v-icon>
+          </v-flex>
         </v-layout>
       </v-container>
 
@@ -40,6 +56,7 @@
       <add-form
         class="mt-3 elevation-15"
         :show-form="showForm"
+        :currentNames="fullList.map(i => i.name)"
         @clearForm="clearCombatantForm()"
         @addCombatant="addCombatant"
       ></add-form>
@@ -50,7 +67,6 @@
       <combatant-list
         :full-list="fullList"
         :turn="turn"
-        @sort="sortList()"
         @removeCombatant="removeCombatant"
         @moveCombatantDown="moveCombatantDown"
         @moveCombatantUp="moveCombatantUp"
@@ -63,9 +79,7 @@
       </v-card>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="2000" color="success">
-      {{ snackBarText }}
-    </v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="2000" color="success">{{ snackBarText }}</v-snackbar>
   </v-app>
 </template>
 
@@ -85,18 +99,16 @@ export default {
       round: 0,
       confirmingReset: false,
       snackbar: false,
-      snackBarText: ''
+      snackBarText: ""
     };
   },
 
   watch: {
-    fullList(oldList, newList) {
-      this.savePlayers();
-    },
-
     turn() {
-      const target = document.getElementById(`combatant-${this.fullList[this.turn].name}`).offsetTop - 145
-      window.scroll({ top: target, behavior: 'smooth' })
+      const target =
+        document.getElementById(`combatant-${this.fullList[this.turn].name}`)
+          .offsetTop - 150;
+      window.scroll({ top: target, behavior: "smooth" });
     }
   },
 
@@ -145,7 +157,7 @@ export default {
     addCombatant(newbie) {
       this.fullList.push(newbie);
       this.sortList();
-      this.procSnackbar(`Added ${newbie.name}`)
+      this.procSnackbar(`Added ${newbie.name}`);
     },
 
     clearCombatantForm() {
@@ -158,7 +170,7 @@ export default {
       }
       this.fullList.splice(this.fullList.indexOf(combatant), 1);
       this.sortList();
-      this.procSnackbar(`Removed ${combatant.name}`)
+      this.procSnackbar(`Removed ${combatant.name}`);
     },
 
     getNext() {
@@ -178,8 +190,8 @@ export default {
     },
 
     autoSave() {
-      this.savePlayers()
-      this.procSnackbar('Automaticaly Saved Data (~‾▿‾)~')
+      this.savePlayers();
+      this.procSnackbar("Automaticaly Saved Data (~‾▿‾)~");
     },
 
     moveCombatantDown(combatant) {
@@ -199,7 +211,7 @@ export default {
     },
 
     reset() {
-      this.procSnackbar('Combat Rounds Reset')
+      this.procSnackbar("Combat Rounds Reset");
       this.turn = 0;
       this.round = 0;
       this.confirmingReset = false;
@@ -207,7 +219,7 @@ export default {
 
     procSnackbar(message) {
       this.snackBarText = message;
-      this.snackbar = true
+      this.snackbar = true;
     }
   },
 
@@ -260,7 +272,7 @@ export default {
 
 .round-header {
   cursor: default;
-  user-select: none; 
+  user-select: none;
 }
 
 .round-header:hover {

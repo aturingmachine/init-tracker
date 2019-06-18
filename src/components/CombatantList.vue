@@ -1,7 +1,12 @@
 <template>
   <v-layout v-if="fullList.length > 0" row class="pt-2 mt-2 mr-2 ml-2">
     <v-flex xs12 class>
-      <v-card :id="`combatant-${combatant.name}`" v-for="combatant in fullList" :key="combatant.name + combatant.int" class="mb-3 mt-2">
+      <v-card
+        :id="`combatant-${combatant.name}`"
+        v-for="combatant in fullList"
+        :key="combatant.name + combatant.isPlayer"
+        class="mb-3 mt-2"
+      >
         <v-toolbar
           dense
           card
@@ -48,35 +53,17 @@
           <v-content grid-list-md>
             <v-layout align-center row wrap class="pt-0 mt-0 pb-0 mb-0">
               <v-flex xs2 class="mr-3">
-                <v-text-field
-                  min="0"
-                  v-model="combatant.int"
-                  type="number"
-                  label="Initiative"
-                  @click="sortList()"
-                ></v-text-field>
+                <v-text-field min="0" v-model="combatant.int" type="number" label="Initiative"></v-text-field>
               </v-flex>
 
               <v-flex xs2>
-                <v-text-field
-                  min="0"
-                  v-model="combatant.ac"
-                  type="number"
-                  label="AC"
-                  @click="sortList()"
-                ></v-text-field>
+                <v-text-field min="0" v-model="combatant.ac" type="number" label="AC"></v-text-field>
               </v-flex>
 
               <v-flex xs2></v-flex>
 
               <v-flex xs2 class="mr-3">
-                <v-text-field
-                  min="0"
-                  v-model="combatant.spellSpave"
-                  type="number"
-                  label="Save"
-                  @click="sortList()"
-                ></v-text-field>
+                <v-text-field min="0" v-model="combatant.spellSpave" type="number" label="Save"></v-text-field>
               </v-flex>
 
               <v-flex xs2>
@@ -85,16 +72,8 @@
                   v-model="combatant.passivePerception"
                   type="number"
                   label="Perception"
-                  @click="sortList()"
                 ></v-text-field>
               </v-flex>
-
-              <!-- Actions for a combatant -->
-              <!-- <v-flex xs1>
-              <v-btn icon small class="red white--text" @click="removeCombatant(combatant)">
-                <v-icon>delete</v-icon>
-              </v-btn>
-              </v-flex>-->
 
               <v-flex xs12>
                 <v-checkbox
@@ -169,10 +148,6 @@ export default {
       } else {
         return false;
       }
-    },
-
-    sortList() {
-      this.$emit("sort");
     },
 
     removeCombatant(combatant) {
