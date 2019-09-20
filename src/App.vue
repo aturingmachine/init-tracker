@@ -57,6 +57,7 @@
         class="mt-3 elevation-15"
         :show-form="showForm"
         :currentNames="fullList.map(i => i.name)"
+        :savedCombatants="savedCombatants"
         @clearForm="clearCombatantForm()"
         @addCombatant="addCombatant"
       ></add-form>
@@ -70,6 +71,7 @@
         @removeCombatant="removeCombatant"
         @moveCombatantDown="moveCombatantDown"
         @moveCombatantUp="moveCombatantUp"
+        @export="exportCombatant"
       ></combatant-list>
 
       <v-card class="blue lighten-1 pa-3 white--text ma-2" v-if="fullList.length < 1">
@@ -93,6 +95,7 @@ export default {
     return {
       name: "Initiative Tracker",
       fullList: [],
+      savedCombatants: [],
       showForm: false,
       turn: 0,
       needsSort: true,
@@ -220,6 +223,14 @@ export default {
     procSnackbar(message) {
       this.snackBarText = message;
       this.snackbar = true;
+    },
+
+    exportCombatant(combatant) {
+      this.savedCombatants.push(combatant);
+      window.localStorage.setItem(
+        "InitTrackerExportedCombatants",
+        JSON.stringify(this.savedCombatants)
+      );
     }
   },
 
@@ -227,6 +238,17 @@ export default {
     if (window.localStorage.getItem("InitTrackerSave")) {
       this.fullList = JSON.parse(
         window.localStorage.getItem("InitTrackerSave")
+      );
+    }
+
+    if (window.localStorage.getItem("InitTrackerExportedCombatants")) {
+      this.savedCombatants = JSON.parse(
+        window.localStorage.getItem("InitTrackerExportedCombatants")
+      );
+    } else {
+      window.localStorage.setItem(
+        "InitTrackerExportedCombatants",
+        JSON.stringify([])
       );
     }
   },

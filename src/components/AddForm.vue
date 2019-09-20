@@ -39,6 +39,18 @@
     </v-card-text>
     <v-card-actions class="mt-0 pt-0">
       <v-btn class="green white--text" :disabled="shouldDisable()" @click="addCombatant()">Add</v-btn>
+      <v-menu offset-y>
+        <v-btn slot="activator" class="blue white--text ml-4">Load</v-btn>
+        <v-list>
+          <v-list-tile
+            v-for="(combatant, index) in savedCombatants"
+            :key="index"
+            @click="loadSaved(combatant)"
+          >
+            <v-list-tile-title>{{ combatant.name }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
       <v-spacer></v-spacer>
       <v-btn class="red white--text" @click="clearCombatantForm()">Cancel</v-btn>
     </v-card-actions>
@@ -60,6 +72,10 @@ export default {
 
     currentNames: {
       type: Array
+    },
+
+    savedCombatants: {
+      type: Array
     }
   },
 
@@ -74,6 +90,11 @@ export default {
 
     addCombatant() {
       this.$emit("addCombatant", this.newCombatant);
+      this.clearCombatantForm();
+    },
+
+    loadSaved(combatant) {
+      this.$emit("addCombatant", combatant);
       this.clearCombatantForm();
     },
 

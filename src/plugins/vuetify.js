@@ -1,6 +1,26 @@
-import Vue from 'vue'
+import Vue from "vue";
 import {
-    Vuetify,
+  Vuetify,
+  VApp,
+  VBtn,
+  VIcon,
+  VGrid,
+  VToolbar,
+  transitions,
+  VTextField,
+  VCard,
+  VAlert,
+  VCheckbox,
+  VBadge,
+  VSelect,
+  VSnackbar,
+  VMenu,
+  VList
+} from "vuetify";
+import "vuetify/src/stylus/app.styl";
+
+Vue.use(Vuetify, {
+  components: {
     VApp,
     VBtn,
     VIcon,
@@ -13,25 +33,9 @@ import {
     VCheckbox,
     VBadge,
     VSelect,
-    VSnackbar
-} from 'vuetify'
-import 'vuetify/src/stylus/app.styl'
-
-Vue.use(Vuetify, {
-    components: {
-        VApp,
-        VBtn,
-        VIcon,
-        VGrid,
-        VToolbar,
-        transitions,
-        VTextField,
-        VCard,
-        VAlert,
-        VCheckbox,
-        VBadge,
-        VSelect,
-        VSnackbar
-    },
-    iconfont: 'md',
-})
+    VSnackbar,
+    VMenu,
+    VList
+  },
+  iconfont: "md"
+});

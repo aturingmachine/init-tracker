@@ -47,6 +47,26 @@
           >
             <v-icon>delete</v-icon>
           </v-btn>
+
+          <v-menu offset-y>
+            <v-btn
+              :class="calculateToolbarClass(combatant) ? 'white--text' : 'black--text'"
+              slot="activator"
+              icon
+              small
+            >
+              <v-icon>more_vert</v-icon>
+            </v-btn>
+            <v-list>
+              <v-list-tile
+                v-for="(option, index) in menuOptions"
+                :key="index"
+                @click="handleMenu(option, combatant)"
+              >
+                <v-list-tile-title>{{ option }}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
         </v-toolbar>
 
         <v-card-text class="pb-0 pt-0">
@@ -128,7 +148,8 @@ export default {
         "Exhaustion 4",
         "Exhaustion 5",
         "Exhaustion 6"
-      ]
+      ],
+      menuOptions: ["export"]
     };
   },
 
@@ -170,6 +191,18 @@ export default {
 
     moveCombatantUp(combatant) {
       this.$emit("moveCombatantUp", combatant);
+    },
+
+    handleMenu(menuOption, combatant) {
+      switch (menuOption) {
+        case "export":
+          this.exportCombatant(combatant);
+          break;
+      }
+    },
+
+    exportCombatant(combatant) {
+      this.$emit("export", combatant);
     }
   }
 };
