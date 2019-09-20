@@ -4,7 +4,7 @@
       <v-card
         :id="`combatant-${combatant.name}`"
         v-for="combatant in fullList"
-        :key="combatant.name + combatant.isPlayer"
+        :key="combatant.id"
         class="mb-3 mt-2"
       >
         <v-toolbar
@@ -149,7 +149,7 @@ export default {
         "Exhaustion 5",
         "Exhaustion 6"
       ],
-      menuOptions: ["export"]
+      menuOptions: ["Export"]
     };
   },
 
@@ -194,7 +194,7 @@ export default {
     },
 
     handleMenu(menuOption, combatant) {
-      switch (menuOption) {
+      switch (menuOption.toLowerCase()) {
         case "export":
           this.exportCombatant(combatant);
           break;

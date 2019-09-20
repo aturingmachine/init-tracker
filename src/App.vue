@@ -6,9 +6,25 @@
       <v-container class="ma-0 pa-0 mb-0" style="max-width: 100%;">
         <v-layout row wrap align-center>
           <v-flex
-            xs12
+            xs11
             class="indigo darken-3 white--text toolbar-icon round-header"
           >Round: {{ round }}</v-flex>
+          <v-flex xs1 class="toolbar-icon blue-grey">
+            <v-menu offset-y>
+              <v-btn slot="activator" dark class="ml-1 mt-0 mb-0 pb-0 pt-0" icon small>
+                <v-icon dark>folder</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-tile
+                  v-for="(combatant, index) in savedCombatants"
+                  :key="index"
+                  @click="deleteSaved(combatant)"
+                >
+                  <v-list-tile-title>Delete: {{ combatant.name }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </v-flex>
           <v-flex xs6 class="orange white--text toolbar-icon" @click="decrementTurn()">
             <v-icon dark>fast_rewind</v-icon>
           </v-flex>
@@ -158,6 +174,7 @@ export default {
     },
 
     addCombatant(newbie) {
+      newbie["id"] = this.createId();
       this.fullList.push(newbie);
       this.sortList();
       this.procSnackbar(`Added ${newbie.name}`);
@@ -231,14 +248,42 @@ export default {
         "InitTrackerExportedCombatants",
         JSON.stringify(this.savedCombatants)
       );
+      this.procSnackbar(`Saved ${combatant.name}`);
+    },
+
+    deleteSaved(combatant) {
+      this.savedCombatants.splice(this.savedCombatants.indexOf(combatant), 1);
+      this.procSnackbar(`Deleted Saved ${combatant.name}`);
+      window.localStorage.setItem(
+        "InitTrackerExportedCombatants",
+        JSON.stringify(this.savedCombatants)
+      );
+    },
+
+    createId() {
+      return (
+        Math.random()
+          .toString(36)
+          .substring(2, 15) +
+        Math.random()
+          .toString(36)
+          .substring(2, 15)
+      );
     }
   },
 
   created() {
     if (window.localStorage.getItem("InitTrackerSave")) {
-      this.fullList = JSON.parse(
+      // this.fullList = JSON.parse(
+      //   window.localStorage.getItem("InitTrackerSave")
+      // );
+      const savedPlayers = JSON.parse(
         window.localStorage.getItem("InitTrackerSave")
       );
+      savedPlayers
+        .filter(player => !player.id)
+        .forEach(player => (player["id"] = this.createId()));
+      this.fullList = savedPlayers;
     }
 
     if (window.localStorage.getItem("InitTrackerExportedCombatants")) {
@@ -295,6 +340,7 @@ export default {
 .round-header {
   cursor: default;
   user-select: none;
+  height: 28px;
 }
 
 .round-header:hover {
