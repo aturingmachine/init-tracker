@@ -269,14 +269,22 @@ export default {
           .toString(36)
           .substring(2, 15)
       );
+    },
+
+    keyBoardHandler(e) {
+      switch (e.keyCode) {
+        case 37:
+          this.decrementTurn();
+          break;
+        case 39:
+          this.incrementTurn();
+          break;
+      }
     }
   },
 
   created() {
     if (window.localStorage.getItem("InitTrackerSave")) {
-      // this.fullList = JSON.parse(
-      //   window.localStorage.getItem("InitTrackerSave")
-      // );
       const savedPlayers = JSON.parse(
         window.localStorage.getItem("InitTrackerSave")
       );
@@ -301,6 +309,8 @@ export default {
   mounted() {
     this.sortList();
     setInterval(this.autoSave, 120000);
+
+    document.onkeyup = this.keyBoardHandler;
   }
 };
 </script>
