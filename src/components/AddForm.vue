@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mb-2 mt-1 ml-2 mr-2 elevation-5" v-if="showForm">
+  <v-card class="mb-2 mt-1 ml-2 mr-2 elevation-5" v-if="showForm" @keyup.enter="addCombatant()">
     <v-card-text class="body">
       <v-layout row wrap>
         <v-flex xs5 class="mr-3">
@@ -89,6 +89,10 @@ export default {
     },
 
     addCombatant() {
+      if (this.shouldDisable()) {
+        return;
+      }
+
       this.$emit("addCombatant", this.newCombatant);
       this.clearCombatantForm();
     },
@@ -106,6 +110,18 @@ export default {
       };
       this.$emit("clearForm");
     }
+  },
+
+  mounted() {
+    window.addEventListener("keyup.enter", () => {
+      this.addCombatant();
+    });
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("keyup.enter", () => {
+      this.addCombatant();
+    });
   }
 };
 </script>

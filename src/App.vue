@@ -20,7 +20,11 @@
                   :key="index"
                   @click="deleteSaved(combatant)"
                 >
-                  <v-list-tile-title>Delete: {{ combatant.name }}</v-list-tile-title>
+                  <v-list-tile-title>
+                    Delete: {{ combatant.name }}-
+                    Int {{ combatant.int }}-
+                    AC {{ combatant.ac }}
+                  </v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -98,6 +102,15 @@
     </div>
 
     <v-snackbar v-model="snackbar" :timeout="2000" color="success">{{ snackBarText }}</v-snackbar>
+
+    <quick-command-list
+      v-if="isQuickActionOpen"
+      class="quick-command-modal"
+      :fullList="fullList"
+      :commands="[...quickActions, ...auxillaryCommands]"
+      @close="closeQuickCommand"
+      @execute="executeQuickCommand"
+    ></quick-command-list>
   </v-app>
 </template>
 
@@ -105,6 +118,7 @@
 import Lineup from "./components/Lineup.vue";
 import AddForm from "./components/AddForm.vue";
 import CombatantList from "./components/CombatantList.vue";
+import QuickCommandList from "./components/QuickCommandList.vue";
 
 export default {
   data: () => {
@@ -118,7 +132,23 @@ export default {
       round: 0,
       confirmingReset: false,
       snackbar: false,
-      snackBarText: ""
+      snackBarText: "",
+      isQuickActionOpen: false,
+      quickActions: [
+        {
+          name: "Add Character",
+          code: "addChar"
+        },
+        {
+          name: "Reset Rounds",
+          code: "roundReset"
+        },
+        {
+          name: "Sort Combatants",
+          code: "sort"
+        }
+      ],
+      auxillaryCommands: []
     };
   },
 
@@ -134,7 +164,8 @@ export default {
   components: {
     Lineup,
     AddForm,
-    CombatantList
+    CombatantList,
+    QuickCommandList
   },
 
   methods: {
@@ -147,6 +178,9 @@ export default {
     },
 
     incrementTurn() {
+      if (this.isQuickActionOpen) {
+        return;
+      }
       if (this.turn == this.fullList.length - 1 || this.fullList.length == 0) {
         this.turn = 0;
         this.round++;
@@ -156,6 +190,9 @@ export default {
     },
 
     decrementTurn() {
+      if (this.isQuickActionOpen) {
+        return;
+      }
       if (this.turn == 0) {
         this.turn = this.fullList.length - 1;
         if (this.round !== 0) {
@@ -178,6 +215,8 @@ export default {
       this.fullList.push(newbie);
       this.sortList();
       this.procSnackbar(`Added ${newbie.name}`);
+
+      this.populateQuickCommands();
     },
 
     clearCombatantForm() {
@@ -185,12 +224,16 @@ export default {
     },
 
     removeCombatant(combatant) {
+      const activeCombatant = this.fullList[this.turn];
       if (this.fullList.indexOf(combatant) == this.fullList.length - 1) {
         this.turn = this.fullList.length - 2;
       }
       this.fullList.splice(this.fullList.indexOf(combatant), 1);
       this.sortList();
+      this.turn = this.fullList.indexOf(activeCombatant);
       this.procSnackbar(`Removed ${combatant.name}`);
+
+      this.populateQuickCommands();
     },
 
     getNext() {
@@ -249,6 +292,8 @@ export default {
         JSON.stringify(this.savedCombatants)
       );
       this.procSnackbar(`Saved ${combatant.name}`);
+
+      this.populateQuickCommands();
     },
 
     deleteSaved(combatant) {
@@ -271,6 +316,108 @@ export default {
       );
     },
 
+    activateQuickCommand() {
+      this.isQuickActionOpen = true;
+    },
+
+    closeQuickCommand() {
+      this.isQuickActionOpen = false;
+    },
+
+    toggleConcentration(combatant) {
+      document.getElementById(`con-${combatant.id}`).click();
+    },
+
+    executeQuickCommand(commandCode, params) {
+      this.isQuickActionOpen = false;
+
+      console.log(commandCode, params);
+
+      switch (commandCode) {
+        case "roundReset":
+          this.reset();
+          break;
+        case "addChar":
+          this.showForm = true;
+          break;
+        case "sort":
+          this.sortList();
+          break;
+        case "loadSaved":
+          this.addCombatant(params);
+          break;
+        case "deleteActive":
+          this.removeCombatant(params);
+          break;
+        case "deleteSaved":
+          this.deleteSaved(params);
+          break;
+        case "toggleCon":
+          this.toggleConcentration(params);
+          break;
+        case "exportActive":
+          this.exportCombatant(params);
+          break;
+      }
+    },
+
+    populateQuickCommands() {
+      this.auxillaryCommands = [];
+
+      // Add load saved commands
+      this.auxillaryCommands = this.auxillaryCommands.concat(
+        this.savedCombatants.map(savedCombatant => {
+          return {
+            name: `Load Saved Combatant: ${savedCombatant.name} - ${savedCombatant.int}`,
+            code: "loadSaved",
+            params: savedCombatant
+          };
+        })
+      );
+
+      // Add delete active commands
+      this.auxillaryCommands = this.auxillaryCommands.concat(
+        this.fullList.map(combatant => {
+          return {
+            name: "Deleted Active Combatant: " + combatant.name,
+            code: "deleteActive",
+            params: combatant
+          };
+        })
+      );
+
+      // Add delete saved commands
+      this.auxillaryCommands = this.auxillaryCommands.concat(
+        this.savedCombatants.map(savedCombatant => {
+          return {
+            name: "Delete Saved Combatant: " + savedCombatant.name,
+            code: "deleteSaved",
+            params: savedCombatant
+          };
+        })
+      );
+
+      this.auxillaryCommands = this.auxillaryCommands.concat(
+        this.fullList.map(combatant => {
+          return {
+            name: "Toggle Concentration: " + combatant.name,
+            code: "toggleCon",
+            params: combatant
+          };
+        })
+      );
+
+      this.auxillaryCommands = this.auxillaryCommands.concat(
+        this.fullList.map(combatant => {
+          return {
+            name: "Export Combatant: " + combatant.name,
+            code: "exportActive",
+            params: combatant
+          };
+        })
+      );
+    },
+
     keyBoardHandler(e) {
       switch (e.keyCode) {
         case 37:
@@ -278,6 +425,9 @@ export default {
           break;
         case 39:
           this.incrementTurn();
+          break;
+        case 190:
+          this.activateQuickCommand();
           break;
       }
     }
@@ -304,6 +454,8 @@ export default {
         JSON.stringify([])
       );
     }
+
+    this.populateQuickCommands();
   },
 
   mounted() {
@@ -355,5 +507,15 @@ export default {
 
 .round-header:hover {
   filter: none;
+}
+
+.quick-command-modal {
+  width: 80%;
+  position: fixed;
+  top: 20%;
+  left: 10%;
+  border: 4px solid gainsboro;
+  border-radius: 6px;
+  box-shadow: grey 0px 8px 8px;
 }
 </style>

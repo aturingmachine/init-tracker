@@ -100,6 +100,7 @@
                   v-model="combatant.isConcentrating"
                   label="Concentration"
                   class="mt-0 pt-0 mb-0 pb-0"
+                  :id="`con-${combatant.id}`"
                 ></v-checkbox>
               </v-flex>
 
