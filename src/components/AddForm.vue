@@ -83,8 +83,7 @@ export default {
     shouldDisable() {
       return !(
         !!this.newCombatant.name &&
-        this.newCombatant.name.length > 0 &&
-        this.currentNames.indexOf(this.newCombatant.name) === -1
+        this.newCombatant.name.length > 0
       );
     },
 
