@@ -91,7 +91,7 @@
         @removeCombatant="removeCombatant"
         @moveCombatantDown="moveCombatantDown"
         @moveCombatantUp="moveCombatantUp"
-        @export="exportCombatant"
+        @save="saveCombatant"
       ></combatant-list>
 
       <v-card class="blue lighten-1 pa-3 white--text ma-2" v-if="fullList.length < 1">
@@ -137,19 +137,31 @@ export default {
       quickActions: [
         {
           name: "Add Character",
-          code: "addChar"
+          code: "addChar",
+          params: {
+            id: "CharAdd"
+          }
         },
         {
           name: "Reset Rounds",
-          code: "roundReset"
+          code: "roundReset",
+          params: {
+            id: "RoundReset"
+          }
         },
         {
           name: "Sort Combatants",
-          code: "sort"
+          code: "sort",
+          params: {
+            id: "CombatSort"
+          }
         },
         {
           name: "Save Combatants",
-          code: "save"
+          code: "save",
+          params: {
+            id: "CombatSave"
+          }
         }
       ],
       auxillaryCommands: []
@@ -289,7 +301,7 @@ export default {
       this.snackbar = true;
     },
 
-    exportCombatant(combatant) {
+    saveCombatant(combatant) {
       this.savedCombatants.push(combatant);
       window.localStorage.setItem(
         "InitTrackerExportedCombatants",
@@ -360,8 +372,8 @@ export default {
         case "toggleCon":
           this.toggleConcentration(params);
           break;
-        case "exportActive":
-          this.exportCombatant(params);
+        case "saveActive":
+          this.saveCombatant(params);
           break;
       }
     },
@@ -415,8 +427,8 @@ export default {
       this.auxillaryCommands = this.auxillaryCommands.concat(
         this.fullList.map(combatant => {
           return {
-            name: "Export Combatant: " + combatant.name,
-            code: "exportActive",
+            name: "Save Combatant: " + combatant.name,
+            code: "saveActive",
             params: combatant
           };
         })

@@ -5,6 +5,7 @@
       v-model="commandQuery"
       placeholder="Begin Typing A Command"
       class="quick-command-input"
+      autocomplete="off"
       @keyup.enter="execute()"
       @keyup.esc="close()"
       @keyup.arrow-down="incrementIndex()"
@@ -12,7 +13,7 @@
     />
     <div
       v-for="(command, index) in matchedResults"
-      :key="command.code + command.name"
+      :key="command.code + command.name + command.params.id"
       :class="`${getResultClass(index)} command`"
       @click="executeCommand(command)"
     >{{ command.name }}</div>

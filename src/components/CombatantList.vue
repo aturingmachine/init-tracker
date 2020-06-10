@@ -150,7 +150,7 @@ export default {
         "Exhaustion 5",
         "Exhaustion 6"
       ],
-      menuOptions: ["Export"]
+      menuOptions: ["Export", "Save"]
     };
   },
 
@@ -196,14 +196,14 @@ export default {
 
     handleMenu(menuOption, combatant) {
       switch (menuOption.toLowerCase()) {
-        case "export":
-          this.exportCombatant(combatant);
+        case "Save":
+          this.saveCombatant(combatant);
           break;
       }
     },
 
-    exportCombatant(combatant) {
-      this.$emit("export", combatant);
+    saveCombatant(combatant) {
+      this.$emit("save", combatant);
     }
   }
 };
