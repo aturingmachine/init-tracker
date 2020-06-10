@@ -146,6 +146,10 @@ export default {
         {
           name: "Sort Combatants",
           code: "sort"
+        },
+        {
+          name: "Save Combatants",
+          code: "save"
         }
       ],
       auxillaryCommands: []
@@ -331,9 +335,10 @@ export default {
     executeQuickCommand(commandCode, params) {
       this.isQuickActionOpen = false;
 
-      console.log(commandCode, params);
-
       switch (commandCode) {
+        case "save":
+          this.savePlayers();
+          break;
         case "roundReset":
           this.reset();
           break;
@@ -379,7 +384,7 @@ export default {
       this.auxillaryCommands = this.auxillaryCommands.concat(
         this.fullList.map(combatant => {
           return {
-            name: "Deleted Active Combatant: " + combatant.name,
+            name: "Delete Active Combatant: " + combatant.name,
             code: "deleteActive",
             params: combatant
           };
@@ -428,6 +433,11 @@ export default {
           break;
         case 190:
           this.activateQuickCommand();
+          break;
+        case 27:
+          if (this.isQuickActionOpen) {
+            this.closeQuickCommand()
+          }
           break;
       }
     }
