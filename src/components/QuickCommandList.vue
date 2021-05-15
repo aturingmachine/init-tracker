@@ -25,14 +25,14 @@ export default {
   data: () => {
     return {
       commandQuery: "",
-      selectedIndex: 0
+      selectedIndex: 0,
     };
   },
 
   watch: {
     commandQuery() {
       this.resetIndex();
-    }
+    },
   },
 
   computed: {
@@ -41,7 +41,7 @@ export default {
         return this.commands.slice(0, 7);
       }
 
-      return this.commands.filter(command => {
+      return this.commands.filter((command) => {
         return (
           command.name
             .toLowerCase()
@@ -51,21 +51,21 @@ export default {
             .includes(this.commandQuery.toLowerCase()) ||
           this.commandQuery
             .split(" ")
-            .every(str =>
+            .every((str) =>
               command.name.toLowerCase().includes(str.toLowerCase())
             )
         );
       });
-    }
+    },
   },
 
   props: {
     fullList: {
-      type: Array
+      type: Array,
     },
     commands: {
-      type: Array
-    }
+      type: Array,
+    },
   },
 
   methods: {
@@ -109,12 +109,12 @@ export default {
       return this.selectedIndex === index
         ? "selected-command"
         : "unselected-command";
-    }
+    },
   },
 
   mounted() {
     document.getElementById("command-input").focus();
-  }
+  },
 };
 </script>
 

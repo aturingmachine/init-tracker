@@ -23,11 +23,11 @@ export default {
 
   props: {
     fullList: {
-      type: Array
+      type: Array,
     },
     turn: {
-      type: Number
-    }
+      type: Number,
+    },
   },
 
   methods: {
@@ -37,8 +37,8 @@ export default {
       } else {
         return this.fullList[this.turn + 1].name;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

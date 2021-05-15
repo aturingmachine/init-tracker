@@ -148,19 +148,19 @@ export default {
         "Exhaustion 3",
         "Exhaustion 4",
         "Exhaustion 5",
-        "Exhaustion 6"
+        "Exhaustion 6",
       ],
-      menuOptions: ["Export", "Save"]
+      menuOptions: ["Export", "Save"],
     };
   },
 
   props: {
     fullList: {
-      type: Array
+      type: Array,
     },
     turn: {
-      type: Number
-    }
+      type: Number,
+    },
   },
 
   methods: {
@@ -196,7 +196,7 @@ export default {
 
     handleMenu(menuOption, combatant) {
       switch (menuOption.toLowerCase()) {
-        case "Save":
+        case "save":
           this.saveCombatant(combatant);
           break;
       }
@@ -204,8 +204,8 @@ export default {
 
     saveCombatant(combatant) {
       this.$emit("save", combatant);
-    }
-  }
+    },
+  },
 };
 </script>
 

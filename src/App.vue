@@ -14,7 +14,7 @@
               <v-btn slot="activator" dark class="ml-1 mt-0 mb-0 pb-0 pt-0" icon small>
                 <v-icon dark>folder</v-icon>
               </v-btn>
-              <v-list>
+              <v-list v-if="savedCombatants.length">
                 <v-list-tile
                   v-for="(combatant, index) in savedCombatants"
                   :key="index"
@@ -27,6 +27,9 @@
                   </v-list-tile-title>
                 </v-list-tile>
               </v-list>
+              <div class="white pa-2 body-2" v-else>
+                No saved Combatants
+              </div>
             </v-menu>
           </v-flex>
           <v-flex xs6 class="orange white--text toolbar-icon" @click="decrementTurn()">
@@ -101,7 +104,7 @@
       </v-card>
     </div>
 
-    <v-snackbar v-model="snackbar" :timeout="2000" color="success">{{ snackBarText }}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout || 2000" color="success">{{ snackBarText }}</v-snackbar>
 
     <quick-command-list
       v-if="isQuickActionOpen"
@@ -139,49 +142,52 @@ export default {
           name: "Add Character",
           code: "addChar",
           params: {
-            id: "CharAdd"
-          }
+            id: "CharAdd",
+          },
         },
         {
           name: "Reset Rounds",
           code: "roundReset",
           params: {
-            id: "RoundReset"
-          }
+            id: "RoundReset",
+          },
         },
         {
           name: "Sort Combatants",
           code: "sort",
           params: {
-            id: "CombatSort"
-          }
+            id: "CombatSort",
+          },
         },
         {
           name: "Save Combatants",
           code: "save",
           params: {
-            id: "CombatSave"
-          }
-        }
+            id: "CombatSave",
+          },
+        },
       ],
-      auxillaryCommands: []
+      auxillaryCommands: [],
+      snackbarTimeout: 0,
     };
   },
 
   watch: {
     turn() {
-      const target =
-        document.getElementById(`combatant-${this.fullList[this.turn].name}`)
-          .offsetTop - 150;
-      window.scroll({ top: target, behavior: "smooth" });
-    }
+      if (this.fullList[this.turn]) {
+        const target =
+          document.getElementById(`combatant-${this.fullList[this.turn].name}`)
+            .offsetTop - 150;
+        window.scroll({ top: target, behavior: "smooth" });
+      }
+    },
   },
 
   components: {
     Lineup,
     AddForm,
     CombatantList,
-    QuickCommandList
+    QuickCommandList,
   },
 
   methods: {
@@ -194,10 +200,10 @@ export default {
     },
 
     incrementTurn() {
-      if (this.isQuickActionOpen) {
+      if (this.isQuickActionOpen || this.fullList.length == 0) {
         return;
       }
-      if (this.turn == this.fullList.length - 1 || this.fullList.length == 0) {
+      if (this.turn == this.fullList.length - 1) {
         this.turn = 0;
         this.round++;
       } else {
@@ -206,7 +212,7 @@ export default {
     },
 
     decrementTurn() {
-      if (this.isQuickActionOpen) {
+      if (this.isQuickActionOpen || this.fullList.length == 0) {
         return;
       }
       if (this.turn == 0) {
@@ -261,7 +267,9 @@ export default {
     },
 
     savePlayers() {
-      let playersToSave = this.fullList.filter(combatant => combatant.isPlayer);
+      let playersToSave = this.fullList.filter(
+        (combatant) => combatant.isPlayer
+      );
       window.localStorage.setItem(
         "InitTrackerSave",
         JSON.stringify(playersToSave)
@@ -296,8 +304,9 @@ export default {
       this.confirmingReset = false;
     },
 
-    procSnackbar(message) {
+    procSnackbar(message, timeoutOverride) {
       this.snackBarText = message;
+      this.snackbarTimeout = timeoutOverride;
       this.snackbar = true;
     },
 
@@ -383,53 +392,55 @@ export default {
 
       // Add load saved commands
       this.auxillaryCommands = this.auxillaryCommands.concat(
-        this.savedCombatants.map(savedCombatant => {
+        this.savedCombatants.map((savedCombatant) => {
           return {
-            name: `Load Saved Combatant: ${savedCombatant.name} - ${savedCombatant.int}`,
+            name: `Load Saved Combatant: ${savedCombatant.name} - ${
+              savedCombatant.int
+            }`,
             code: "loadSaved",
-            params: savedCombatant
+            params: savedCombatant,
           };
         })
       );
 
       // Add delete active commands
       this.auxillaryCommands = this.auxillaryCommands.concat(
-        this.fullList.map(combatant => {
+        this.fullList.map((combatant) => {
           return {
             name: "Delete Active Combatant: " + combatant.name,
             code: "deleteActive",
-            params: combatant
+            params: combatant,
           };
         })
       );
 
       // Add delete saved commands
       this.auxillaryCommands = this.auxillaryCommands.concat(
-        this.savedCombatants.map(savedCombatant => {
+        this.savedCombatants.map((savedCombatant) => {
           return {
             name: "Delete Saved Combatant: " + savedCombatant.name,
             code: "deleteSaved",
-            params: savedCombatant
+            params: savedCombatant,
           };
         })
       );
 
       this.auxillaryCommands = this.auxillaryCommands.concat(
-        this.fullList.map(combatant => {
+        this.fullList.map((combatant) => {
           return {
             name: "Toggle Concentration: " + combatant.name,
             code: "toggleCon",
-            params: combatant
+            params: combatant,
           };
         })
       );
 
       this.auxillaryCommands = this.auxillaryCommands.concat(
-        this.fullList.map(combatant => {
+        this.fullList.map((combatant) => {
           return {
             name: "Save Combatant: " + combatant.name,
             code: "saveActive",
-            params: combatant
+            params: combatant,
           };
         })
       );
@@ -448,11 +459,11 @@ export default {
           break;
         case 27:
           if (this.isQuickActionOpen) {
-            this.closeQuickCommand()
+            this.closeQuickCommand();
           }
           break;
       }
-    }
+    },
   },
 
   created() {
@@ -461,8 +472,8 @@ export default {
         window.localStorage.getItem("InitTrackerSave")
       );
       savedPlayers
-        .filter(player => !player.id)
-        .forEach(player => (player["id"] = this.createId()));
+        .filter((player) => !player.id)
+        .forEach((player) => (player["id"] = this.createId()));
       this.fullList = savedPlayers;
     }
 
@@ -478,6 +489,15 @@ export default {
     }
 
     this.populateQuickCommands();
+
+    if (this.fullList.length === 0) {
+      setTimeout(() => {
+        this.procSnackbar(
+          'Have a keyboard? Press "." to bring up the quick command menu!',
+          4000
+        );
+      }, 1500);
+    }
   },
 
   mounted() {
@@ -485,7 +505,7 @@ export default {
     setInterval(this.autoSave, 120000);
 
     document.onkeyup = this.keyBoardHandler;
-  }
+  },
 };
 </script>
 

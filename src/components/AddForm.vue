@@ -61,30 +61,27 @@
 export default {
   data: () => {
     return {
-      newCombatant: {}
+      newCombatant: {},
     };
   },
 
   props: {
     showForm: {
-      type: Boolean
+      type: Boolean,
     },
 
     currentNames: {
-      type: Array
+      type: Array,
     },
 
     savedCombatants: {
-      type: Array
-    }
+      type: Array,
+    },
   },
 
   methods: {
     shouldDisable() {
-      return !(
-        !!this.newCombatant.name &&
-        this.newCombatant.name.length > 0
-      );
+      return !(!!this.newCombatant.name && this.newCombatant.name.length > 0);
     },
 
     addCombatant() {
@@ -105,10 +102,10 @@ export default {
       this.newCombatant = {
         name: "",
         int: null,
-        isPlayer: false
+        isPlayer: false,
       };
       this.$emit("clearForm");
-    }
+    },
   },
 
   mounted() {
@@ -121,7 +118,7 @@ export default {
     window.removeEventListener("keyup.enter", () => {
       this.addCombatant();
     });
-  }
+  },
 };
 </script>
 
