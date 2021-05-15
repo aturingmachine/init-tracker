@@ -1,3 +1,6 @@
 module.exports = {
-  "baseUrl": "init-tracker"
+  "baseUrl": "init-tracker",
+  pwa: {
+    name: "Initiative Tracker"
+  }
 }

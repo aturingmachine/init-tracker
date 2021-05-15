@@ -9,12 +9,14 @@
     "deploy": "sh scripts/build.sh"
   },
   "dependencies": {
+    "register-service-worker": "^1.7.1",
     "vue": "^2.5.17",
     "vuetify": "^1.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
     "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-plugin-pwa": "^4.5.13",
     "@vue/cli-service": "^3.0.3",
     "babel-plugin-transform-imports": "^1.5.0",
     "push-dir": "^0.4.1",
